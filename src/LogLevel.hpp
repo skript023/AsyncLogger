@@ -7,6 +7,7 @@ namespace al
         VERBOSE,
         INFO,
         WARNING,
-        FATAL
+        FATAL,
+        INFO_RAW
     };
 }
