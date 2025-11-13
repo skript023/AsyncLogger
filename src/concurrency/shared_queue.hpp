@@ -43,7 +43,7 @@ namespace al
         {
             std::unique_lock<Mutex> lock(m_);
             while (queue_.empty()) {
-                data_cond_.wait(lock);
+                data_cond_.wait(m_);
                 //  This 'while' loop is equal to
                 //  data_cond_.wait(lock, [](bool result){return !queue_.empty();});
             }
