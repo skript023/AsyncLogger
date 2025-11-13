@@ -12,7 +12,7 @@
 #endif
 #include <functional>
 #include <thread>
-#include "concurrency/lock_free.hpp"
+#include "concurrency/shared_queue.hpp"
 #include "LogCapture.hpp"
 #include "LogIntermediate.hpp"
 #include "LogLevel.hpp"
@@ -60,7 +60,7 @@ namespace al
     private:
         friend LogCapture::~LogCapture();
 
-        lock_free_queue<std::function<void()>> m_Queue;
+        shared_queue<std::function<void()>> m_Queue;
         std::vector<LogSink> m_Sinks;
         bool m_Running = false;
         std::thread m_LogWorker;

@@ -49,10 +49,11 @@ namespace al
 
     void Logger::DestroyImpl()
     {
-        m_Running = false;
-        m_Queue.push([]{}); // push dummy supaya wait_and_pop() keluar dari loop
-        if (m_LogWorker.joinable())
-            m_LogWorker.join();
+        m_Queue.push([this]
+        {
+            m_Running = false;
+        });
+        m_LogWorker.join();
     }
 
     void Logger::InitImpl()
@@ -71,9 +72,10 @@ namespace al
 
     void Logger::FlushQueueImpl()
     {
-        std::function<void()> func;
-        while (m_Queue.try_pop(func))
+        while (!m_Queue.empty())
         {
+            std::function<void()> func;
+            m_Queue.wait_and_pop(func);
             func();
         }
     }

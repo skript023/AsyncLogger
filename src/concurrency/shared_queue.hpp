@@ -1,8 +1,8 @@
 #pragma once
 #include <queue>
-#include <mutex>
+#include "mutex.hpp"
 #include <exception>
-#include <condition_variable>
+#include "conditional_variable.hpp"
 
 /**
  * from Kjellkod/concurrent on Github
@@ -64,8 +64,8 @@ namespace al
 
     private:
         std::queue<T> queue_;
-        mutable std::mutex m_;
-        std::condition_variable data_cond_;
+        mutable Mutex m_;
+        ConditionVariable data_cond_;
 
         shared_queue& operator=(const shared_queue&) = delete;
         shared_queue(const shared_queue& other) = delete;
