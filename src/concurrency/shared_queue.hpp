@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+#include <mutex>
 #include "mutex.hpp"
 #include <exception>
 #include "conditional_variable.hpp"
@@ -19,7 +20,7 @@ namespace al
         void push(T item)
         {
             {
-                std::lock_guard<std::mutex> lock(m_);
+                std::lock_guard<Mutex> lock(m_);
                 queue_.push(std::move(item));
             }
             data_cond_.notify_one();
@@ -28,7 +29,7 @@ namespace al
         /// \return immediately, with true if successful retrieval
         bool try_and_pop(T& popped_item)
         {
-            std::lock_guard<std::mutex> lock(m_);
+            std::lock_guard<Mutex> lock(m_);
             if (queue_.empty()) {
                 return false;
             }
@@ -40,7 +41,7 @@ namespace al
         /// Try to retrieve, if no items, wait till an item is available and try again
         void wait_and_pop(T& popped_item)
         {
-            std::unique_lock<std::mutex> lock(m_);
+            std::unique_lock<Mutex> lock(m_);
             while (queue_.empty()) {
                 data_cond_.wait(lock);
                 //  This 'while' loop is equal to
@@ -52,13 +53,13 @@ namespace al
 
         bool empty() const
         {
-            std::lock_guard<std::mutex> lock(m_);
+            std::lock_guard<Mutex> lock(m_);
             return queue_.empty();
         }
 
         size_t size() const
         {
-            std::lock_guard<std::mutex> lock(m_);
+            std::lock_guard<Mutex> lock(m_);
             return queue_.size();
         }
 
