@@ -8,7 +8,9 @@
 #include <errno.h>
 #endif
 
-class ConditionVariable {
+namespace al
+{
+	class ConditionVariable {
 public:
     ConditionVariable();
     ~ConditionVariable();
@@ -33,3 +35,5 @@ private:
     pthread_cond_t m_cond;
 #endif
 };
+
+}

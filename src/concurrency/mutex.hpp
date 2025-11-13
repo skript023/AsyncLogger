@@ -8,7 +8,9 @@
 #include <windows.h>
 #endif
 
-class Mutex {
+namespace al
+{
+	class Mutex {
 public:
 	Mutex();
 	~Mutex();
@@ -27,5 +29,6 @@ public:
 	CRITICAL_SECTION lck;
 #endif
 };
+}
 
 #endif
