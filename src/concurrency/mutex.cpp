@@ -12,38 +12,44 @@ Mutex::Mutex() {
 #endif
 }
 
-Mutex::~Mutex() {
-	pthread_mutex_destroy(&lck);
-}
+namespace al
+{
+	Mutex::~Mutex() {
+		pthread_mutex_destroy(&lck);
+	}
 
-void Mutex::lock() {
-	pthread_mutex_lock(&lck);
-}
+	void Mutex::lock() {
+		pthread_mutex_lock(&lck);
+	}
 
-bool Mutex::trylock() {
-	return !pthread_mutex_trylock(&lck);
-}
+	bool Mutex::trylock() {
+		return !pthread_mutex_trylock(&lck);
+	}
 
-void Mutex::unlock() {
-	pthread_mutex_unlock(&lck);
+	void Mutex::unlock() {
+		pthread_mutex_unlock(&lck);
+	}
 }
 
 #else
 #include <windows.h>
 
-Mutex::Mutex() {
-	::InitializeCriticalSection(&lck);
-}
+namespace al
+{
+	Mutex::Mutex() {
+		::InitializeCriticalSection(&lck);
+	}
 
-Mutex::~Mutex() {
-	::DeleteCriticalSection(&lck);
-}
+	Mutex::~Mutex() {
+		::DeleteCriticalSection(&lck);
+	}
 
-void Mutex::lock() {
-	::EnterCriticalSection(&lck);
-}
+	void Mutex::lock() {
+		::EnterCriticalSection(&lck);
+	}
 
-void Mutex::unlock() {
-	::LeaveCriticalSection(&lck);
+	void Mutex::unlock() {
+		::LeaveCriticalSection(&lck);
+	}
 }
 #endif
